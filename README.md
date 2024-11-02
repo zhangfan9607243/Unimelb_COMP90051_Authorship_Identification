@@ -92,31 +92,34 @@ The files in this project includs:
   * `Method 3 - Basic + Word2Vec + LSTM.ipynb`: RNN model incorporating basic feature engineering and word2vec embeddings.
 
 ## Data Processing
-In order to make our data ready for the downstream feature engineering and models, we make the following data preprocessing steps:
-1. Seperate prolific authors & non-prolific authors in training data by creating two columns `author` and `coauthors` from existing column `authors`, since we only have a `coauthors` column in testing data with non-prolific authors only.
-2. Create string format of title and abstract, namely `title_text` and `abstract_text`, and merge them into a new single column, namely `text`.
-3. Fill NA in venue with 465.
-4. Reduce the training data size, since there are too many papers in training data without non-prolific authors, which is about 18,000, and we keep only 1000 of them.
+To prepare our data for downstream feature engineering and modeling, we will perform the following data preprocessing steps:
+1. Separate prolific authors from non-prolific authors in the training data by creating two columns: author and coauthors from the existing authors column. This is necessary since the testing data only contains a coauthors column with non-prolific authors.
+2. Create string formats for the title and abstract, named title_text and abstract_text, and merge them into a new column called text.
+3. Fill any NA values in the venue column with 465.
+4. Reduce the training data size, as there are approximately 18,000 papers in the training set without non-prolific authors. We will retain only 1,000 of these papers.
 
 ## Feature Engineering
 ### 1. Basic Feature Engineering
-First we will try some basic feature engineering methods without machine learning techniques. The main idea is to establish writing history records.
+First, we will implement some basic feature engineering methods without using machine learning techniques. The main goal is to establish writing history records, resulting in a total of 500 combined basic features.
 
 #### (1) Coauthors
-For coauthors, we built a graph showing the co-occurance among authors, with nodes representing authors, and edges weights representing co-occurance frequency between two authors. 
+For coauthors, we create a graph showing the co-occurrence among authors, where nodes represent authors and edge weights represent the frequency of co-occurrence between two authors.
 
-Then, for each paper, we create a temporary array with size 100, with each position represent a prolific author. For each coauthor in coauthors list of this paper, we locate this coauthor in the graph, and find its prolific authors neighbours, and add the edge weight on to the position of the temporary array. We do this for all the coauthors of this paper.
+For each paper, we create a temporary array of size 100, with each position representing a prolific author. For each coauthor in the paper's coauthors list, we locate them in the graph, find their prolific author neighbors, and add the corresponding edge weight to the appropriate position in the temporary array. We repeat this for all coauthors of the paper.
 
-Then, we consider deeper collaborative relationships. We search the graph by DFS, and whenever we encounter a prolific author, we add the edge weight * (1 / (depth * log depth)) at the corresponding position in the temporary array. We do this for all the coauthors of this paper.
+Next, we consider deeper collaborative relationships by searching the graph using depth-first search (DFS). Whenever we encounter a prolific author, we add the edge weight * (1 / (depth * log depth)) to the corresponding position in the temporary array. This process is applied to all coauthors of the paper.
 
-Finally, this temporary array with size 100 will be the feature in this part.
+Finally, this temporary array of size 100 will serve as a feature in this section.
 
 #### (2) Venue
-For venue, we firstly establish a venue dictionary that record the venue - authors frequency history in training dataset. Then, similarly, and for each paper, we locate its venue in the dictionary, and transform its frequencies of 100 prolific authors into an array with size 100, and use it as a feature.
+For the venue, we first establish a dictionary that records the frequency history of authors in relation to venues in the training dataset. For each paper, we locate its venue in the dictionary and transform the frequencies of the 100 prolific authors into an array of size 100, which will be used as a feature.
 
-On the other hand, we also create another feature based on venue, considering the coauthors ties. For each coauthor of a given paper, we also need to consider the author frequency of the venues where this co-author has published. Also, we store it as an array with size 100.
+Additionally, we create another feature based on venue, considering the coauthor ties. For each coauthor of a given paper, we look at the author frequency of the venues where that coauthor has published and store this information in another array of size 100.
 
 #### (3) Text
+For the text (which combines the title and abstract), we start by training a TFIDF vectorizer to transform each text into TFIDF vectors, identifying the top 20 unique words. We then record the frequencies of these unique words in a dictionary. For each paper's text, we identify its top 20 unique words, find them in the dictionary, and convert the frequencies of 100 prolific authors into an array of size 100 to use as a feature.
+
+Similarly, we create another version of the text-based feature, considering the coauthor ties, and store it as an array of size 100.
 
 ### 2. Textual Feature Engineering
 #### (1) Doc2Vec
