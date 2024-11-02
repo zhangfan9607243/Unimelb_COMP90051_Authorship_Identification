@@ -44,7 +44,6 @@ Before running the project please prepare the following paths:
 ```
 
 The files in this project includs:
-
 * `data/`: The original data and processed features.
   * `data1/`: The original datasets, which can be downloaded from the Kaggle link.
     * `train.json`: The original training dataset.
@@ -77,6 +76,20 @@ The files in this project includs:
   * `model_word2vec/`:
     * `model_word2vec_title.bin`: The Word2Vec model for title.
     * `model_word2vec_abstract.bin`: The Word2Vec model for abstract.
+* `data_process/Data Loading & Preprocessing.ipynb`: Load and preprocess data and make it ready for feature engineering.
+* `feature_engineering_basic/`: The basic feature engineering based on writing history without machine learning techniques.
+  * `Basic Feature 1 - Coauthors.ipynb`: The basic feature engineering for coauthors based on co-occurance history.
+  * `Basic Feature 2 - Venue a.ipynb`: The basic feature engineering for venue based on writing history.
+  * `Basic Feature 2 - Venue b.ipynb`: The basic feature engineering for venue based on writing history and coauthors ties.
+  * `Basic Feature 3 - Text a.ipynb`: The basic feature engineering for text based on writing history.
+  * `Basic Feature 3 - Text b.ipynb`: The basic feature engineering for text based on writing history and coauthors ties.
+* `feature_engineering_text/`: The models for contextual embeddings of title & abstract.
+  * `Textual Feature 1 - Doc2Vec.ipynb`: Train the doc2vec model for title & abstract and generate document embeddings for training & testing data.
+  * `Textual Feature 2 - Word2Vec.ipynb`: Train the word2vec mode for title & abstract and save the word embedding maps as json files.
+* `methods/`: The models for the main multi-label classification task.
+  * `Method 1 - Basic Features + FNN.ipynb`: FNN based solely on basic feature engineering.
+  * `Method 2 - Basic + Doc2Vec + FNN.ipynb`: FNN combining basic feature engineering with doc2vec embeddings.
+  * `Method 3 - Basic + Word2Vec + LSTM.ipynb`: RNN model incorporating basic feature engineering and word2vec embeddings.
 
 ## Data Processing
 
