@@ -22,7 +22,7 @@ For modeling, we will try three approaches:
 
 1. A FNN based solely on basic feature engineering.
 2. A FNN combining basic feature engineering with doc2vec embeddings.
-3. An RNN model incorporating both basic feature engineering and word2vec embeddings.
+3. An RNN model incorporating basic feature engineering and word2vec embeddings.
 
 Additionally, for all three methods, we will apply a rule-based adjustment: if none of the five types of basic feature engineering matches any of the prolific authors, we will assume that the article has no prolific author. Finally, we will compare the performance of these three models to evaluate their effectiveness.
 
@@ -64,6 +64,12 @@ The files in this project includs:
     * `x_test_text_a.npy`: The basic feature engineering of testing data for combined texts of titles and articles after running `/feature_engineering_basic/Basic Feature 3 - Text a.ipynb`.
     * `x_tran_text_b.npy`: The basic feature engineering of training data for combined texts of titles and articles considering authors relationships after running `/feature_engineering_basic/Basic Feature 3 - Text b.ipynb`.
     * `x_test_text_b.npy`: The basic feature engineering of testing data for combined texts of titles and articles considering authors relationships after running `/feature_engineering_basic/Basic Feature 3 - Text b.ipynb`.
+    * `x_tran_abstract_doc2vec.npy`: The doc2vec embeddings of abstract on training data, after runing `/feature_engineering_text/Textual Feature 1 - Doc2Vec.ipynb`.
+    * `x_test_abstract_doc2vec.npy`: The doc2vec embeddings of abstract on testing data, after runing `/feature_engineering_text/Textual Feature 1 - Doc2Vec.ipynb`.
+    * `x_tran_title_doc2vec.npy`: The doc2vec embeddings of title on training data, after runing `/feature_engineering_text/Textual Feature 1 - Doc2Vec.ipynb`.
+    * `x_test_title_doc2vec.npy`: The doc2vec embeddings of title on tesing data, after runing `/feature_engineering_text/Textual Feature 1 - Doc2Vec.ipynb`.
+    * `x_tran_abstract_word_vectors.json`: The map of word embeddings trained by abstract on training data, after runing `/feature_engineering_text/Textual Feature 2 - Word2Vec.ipynb`.
+    * `x_tran_title_word_vectors.json`: The map of word embeddings trained by title on training data, after runing `/feature_engineering_text/Textual Feature 2 - Word2Vec.ipynb`.
 * `model/`: The embedding models for text features.
   * `model_doc2vec/`:
     * `model_doc2vec_title.bin`: The Doc2Vec model for title.
