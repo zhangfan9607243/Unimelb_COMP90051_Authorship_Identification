@@ -92,14 +92,18 @@ The files in this project includs:
   * `Method 3 - Basic + Word2Vec + LSTM.ipynb`: RNN model incorporating basic feature engineering and word2vec embeddings.
 
 ## Data Processing
-
-
-
+In order to make our data ready for the downstream feature engineering and models, we make the following data preprocessing steps:
+1. Seperate prolific authors & non-prolific authors in training data by creating two columns `author` and `coauthors` from existing column `authors`, since we only have a `coauthors` column in testing data with non-prolific authors only.
+2. Create string format of title and abstract, namely `title_text` and `abstract_text`, and merge them into a new single column, namely `text`.
+3. Fill NA in venue with 465.
+4. Reduce the training data size, since there are too many papers in training data without non-prolific authors, which is about 18,000, and we keep only 1000 of them.
 
 ## Feature Engineering
+### 1. Basic Feature Engineering
+First we will try some basic feature engineering methods without machine learning techniques. The main idea is to establish writing history records.
 
-
-
+#### (1) Coauthors
+For coauthors, we built a graph showing the co-occurance among authors, with nodes representing authors, and edges representing co-occurance frequency between two authors.
 
 ## Models
 
