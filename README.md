@@ -22,7 +22,7 @@ For modeling, we will try three approaches:
 
 1. A FNN based solely on basic feature engineering.
 2. A FNN combining basic feature engineering with doc2vec embeddings.
-3. An RNN model incorporating basic feature engineering and word2vec embeddings.
+3. An LSTM model incorporating basic feature engineering and word2vec embeddings.
 
 Additionally, for all three methods, we will apply a rule-based adjustment: if none of the five types of basic feature engineering matches any of the prolific authors, we will assume that the article has no prolific author. Finally, we will compare the performance of these three models to evaluate their effectiveness.
 
@@ -89,7 +89,7 @@ The files in this project includs:
 * `methods/`: The models for the main multi-label classification task.
   * `Method 1 - Basic Features + FNN.ipynb`: FNN based solely on basic feature engineering.
   * `Method 2 - Basic + Doc2Vec + FNN.ipynb`: FNN combining basic feature engineering with doc2vec embeddings.
-  * `Method 3 - Basic + Word2Vec + LSTM.ipynb`: RNN model incorporating basic feature engineering and word2vec embeddings.
+  * `Method 3 - Basic + Word2Vec + LSTM.ipynb`: LSTM model incorporating basic feature engineering and word2vec embeddings.
 
 ## Data Processing
 To prepare our data for downstream feature engineering and modeling, we will perform the following data preprocessing steps:
@@ -123,12 +123,25 @@ Similarly, we create another version of the text-based feature, considering the 
 
 ### 2. Textual Feature Engineering
 #### (1) Doc2Vec
+The Doc2Vec model generates embeddings for entire documents. In this case, we train two separate Doc2Vec models using the titles and abstracts in the training data, respectively. We then use these models to produce embeddings for both titles and abstracts in the training and testing datasets.
 
 #### (2) Word2Vec
+The Word2Vec model is utilized to create word embeddings. Similarly, we train two Word2Vec models using the titles and abstracts in the training data, and we store the resulting word embeddings in JSON files. The text matrix for titles and abstracts, which consists of a sequence of embeddings for the individual words, will be generated within the dataset and data loader during model training and prediction.
 
 ## Models
+### 1. FNN + Basic Features
+In this model, we construct a feed-forward neural network (FNN) based solely on basic features. The network consists of 3 hidden layers with 512, 256, and 128 nodes, respectively. The output activation function is sigmoid, which is suitable for multi-label classification. To prevent overfitting, we apply a dropout rate of 0.1 in the hidden layers and use L2 regularization on the parameters.
 
+### 2. FNN + Basic Features & Doc2Vec Features
+In this model, we also construct a feed-forward neural network (FNN). The input features consist of the concatenated basic features and the Doc2Vec features for the title and abstract. We maintain the same model settings as Model 1, but this time we use a new FNN architecture with four hidden layers containing 1024, 512, 256, and 128 nodes, respectively.
 
-
+### 3. LSTM + Basic Features & Word2Vec Features
+In this model, we first construct two LSTM models for the title and abstract text matrices, which consist of sequences of word embeddings for their constituent words. We then concatenate the outputs of the two LSTM models with the basic features and feed them into an FNN classifier. The other model settings are similar to those in Model 1 and Model 2.
 
 ## Final Results
+The final performance of models are evaluated by the F1 scores on test dataset on Kaggle:
+* Method 1: 0.5279 (Final Score with Rank 19/187)
+* Method 2: 0.4810
+* Method 3: 0.4580
+
+Finally, Method 1 achieved the best prediction performance, indicating that the basic features derived from writing history contain sufficient information for predicting the authors of a given paper.
