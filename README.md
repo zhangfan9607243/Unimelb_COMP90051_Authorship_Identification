@@ -103,7 +103,25 @@ In order to make our data ready for the downstream feature engineering and model
 First we will try some basic feature engineering methods without machine learning techniques. The main idea is to establish writing history records.
 
 #### (1) Coauthors
-For coauthors, we built a graph showing the co-occurance among authors, with nodes representing authors, and edges representing co-occurance frequency between two authors.
+For coauthors, we built a graph showing the co-occurance among authors, with nodes representing authors, and edges weights representing co-occurance frequency between two authors. 
+
+Then, for each paper, we create a temporary array with size 100, with each position represent a prolific author. For each coauthor in coauthors list of this paper, we locate this coauthor in the graph, and find its prolific authors neighbours, and add the edge weight on to the position of the temporary array. We do this for all the coauthors of this paper.
+
+Then, we consider deeper collaborative relationships. We search the graph by DFS, and whenever we encounter a prolific author, we add the edge weight * (1 / (depth * log depth)) at the corresponding position in the temporary array. We do this for all the coauthors of this paper.
+
+Finally, this temporary array with size 100 will be the feature in this part.
+
+#### (2) Venue
+For venue, we firstly establish a venue dictionary that record the venue - authors frequency history in training dataset. Then, similarly, and for each paper, we locate its venue in the dictionary, and transform its frequencies of 100 prolific authors into an array with size 100, and use it as a feature.
+
+On the other hand, we also create another feature based on venue, considering the coauthors ties. For each coauthor of a given paper, we also need to consider the author frequency of the venues where this co-author has published. Also, we store it as an array with size 100.
+
+#### (3) Text
+
+### 2. Textual Feature Engineering
+#### (1) Doc2Vec
+
+#### (2) Word2Vec
 
 ## Models
 
