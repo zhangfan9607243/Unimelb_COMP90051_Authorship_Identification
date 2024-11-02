@@ -37,6 +37,7 @@ Before running the project please prepare the following paths:
 |---data
     |---data1
     |---data2
+    |---data3
 |---model
     |---model_doc2vec
     |---model_word2vec
