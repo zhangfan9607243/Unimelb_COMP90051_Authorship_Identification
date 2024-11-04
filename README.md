@@ -1,7 +1,7 @@
 # Unimelb COMP90051 Authorship Identification
 
 ## Acknowledgement
-I would like to extend my sincere gratitude to the COMP90051 2022S2 teaching team for providing me with the opportunity to work on this project, as well as for their guidance and feedback on my work.
+I would like to extend my sincere gratitude to the Unimelb COMP90051 2022S2 teaching team for providing me with the opportunity to work on this project, as well as for their guidance and feedback on my work.
 
 ## Project Introduction
 
