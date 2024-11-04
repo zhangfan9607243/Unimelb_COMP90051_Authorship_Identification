@@ -1,5 +1,8 @@
 # Unimelb COMP90051 Authorship Identification
 
+## Acknowledgement
+I would like to extend my sincere gratitude to the COMP90051 2022S2 teaching team for providing me with the opportunity to work on this project, as well as for their guidance and feedback on my work.
+
 ## Project Introduction
 
 This project is a typical machine learning project that focuses on the task of authorship attribution, which involves identifying the author of a given article.
