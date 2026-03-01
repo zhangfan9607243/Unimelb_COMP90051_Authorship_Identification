@@ -75,7 +75,7 @@ For coauthors, we create a graph showing the co-occurrence among authors, where 
 
 For each paper, we create a temporary array of size 100, with each position representing a prolific author. For each coauthor in the paper's coauthors list, we locate them in the graph, find their prolific author neighbors, and add the corresponding edge weight to the appropriate position in the temporary array. We repeat this for all coauthors of the paper.
 
-Next, we consider deeper collaborative relationships by searching the graph using depth-first search (DFS). Whenever we encounter a prolific author, we add the edge weight * (1 / (depth * log depth)) to the corresponding position in the temporary array. This process is applied to all coauthors of the paper.
+Next, we consider deeper collaborative relationships by searching the graph using depth-first search (DFS). Whenever we encounter a prolific author, we add the edge `weight * (1 / (depth * log depth))` to the corresponding position in the temporary array. This process is applied to all coauthors of the paper.
 
 Finally, this temporary array of size 100 will serve as a feature in this section.
 
@@ -101,9 +101,9 @@ In this method, we focus on textual features and utilize an empty BERT model for
 First, we append authors, venue, and year into the vocabulary:
 
 - The texts (title and abstract) are represented as sequences of word indices, where each word is mapped to an index in the range {1,...,4999}.
-- The year is represented as an index in the range {0,...,19}. We add `5000` to the year indices to append them to the vocabulary without conflicts.
-- The venue is represented as an index in the range {0,...,464}. So, we add an additional `5020` to the venue indices to append them to the vocabulary without conflicts.
-- The authors are represented as indices in the range {0,...,21245}. We add `5486` to the author indices to append them to the vocabulary without conflicts.
+- The year is represented as an index in the range {0,...,19}. We add 5000 to the year indices to append them to the vocabulary without conflicts.
+- The venue is represented as an index in the range {0,...,464}. So, we add an additional 5020 to the venue indices to append them to the vocabulary without conflicts.
+- The authors are represented as indices in the range {0,...,21245}. We add 5486 to the author indices to append them to the vocabulary without conflicts.
 
 Then, we create a combined text feature by concatenating all the integer-formatted features into a single sequence by the following order: year, venue, coauthors, title, abstract. This combined feature will be used as input for the BERT model, with max sequence length set to 128.
 
@@ -117,11 +117,11 @@ The BERT model is downloaded from Hugging Face and the parameters are initialize
 
 The final performance of models are evaluated by the F1 scores on test dataset on Kaggle:
 
-|          | Method |  Precision | Recall | F1 Score |
-|----------|------------|-------|-------|-------|
-| Method 1 | Training   | 0.316 | 0.290 | 0.302 |
-| Method 1 | Validation | 0.306 | 0.281 | 0.293 |
-| Method 1 | Testing    | 0.305 | 0.280 | 0.292 |
-| Method 2 | Training   | 0.316 | 0.290 | 0.302 |
-| Method 2 | Validation | 0.306 | 0.281 | 0.293 |
-| Method 2 | Testing    | 0.305 | 0.280 | 0.292 |
+| Method   | Dataset    | Precision | Recall | F1 Score |
+|----------|------------|-----------|--------|----------|
+| Method 1 | Training   | 0.316     | 0.290  | 0.302    |
+| Method 1 | Validation | 0.306     | 0.281  | 0.293    |
+| Method 1 | Testing    | 0.305     | 0.280  | 0.292    |
+| Method 2 | Training   | 0.316     | 0.290  | 0.302    |
+| Method 2 | Validation | 0.306     | 0.281  | 0.293    |
+| Method 2 | Testing    | 0.305     | 0.280  | 0.292    |
