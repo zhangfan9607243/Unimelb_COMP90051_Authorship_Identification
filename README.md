@@ -119,9 +119,9 @@ The final performance of models are evaluated by the F1 scores on test dataset o
 
 | Method   | Dataset    | Precision | Recall | F1 Score |
 |----------|------------|-----------|--------|----------|
-| Method 1 | Training   | 0.316     | 0.290  | 0.302    |
-| Method 1 | Validation | 0.306     | 0.281  | 0.293    |
-| Method 1 | Testing    | 0.305     | 0.280  | 0.292    |
+| Method 1 | Training   | 0.9986    | 0.9911 | 0.9948   |
+| Method 1 | Validation | 0.8824    | 0.7057 | 0.7725   |
+| Method 1 | Testing    | 0.5500    | 0.5077 | 0.5279   |
 | Method 2 | Training   | 0.316     | 0.290  | 0.302    |
 | Method 2 | Validation | 0.306     | 0.281  | 0.293    |
 | Method 2 | Testing    | 0.305     | 0.280  | 0.292    |
