@@ -19,7 +19,7 @@ This project is a typical machine learning project that focuses on the task of a
 
 This is a multi-label classification task because a single article may have one or multiple authors. 
 
-For modeling, we will try an FNN based solely on basic feature engineering. The performance is evaluated by F1 score of classification on testing dataset through Kaggle: https://www.kaggle.com/competitions/comp90051-22-s2-authorship.
+For modeling, we will try an FNN based on feature engineering. The performance is evaluated by F1 score of classification on testing dataset through Kaggle: https://www.kaggle.com/competitions/comp90051-22-s2-authorship.
 
 ## File Description
 
