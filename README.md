@@ -19,12 +19,7 @@ This project is a typical machine learning project that focuses on the task of a
 
 This is a multi-label classification task because a single article may have one or multiple authors. 
 
-For modeling, we will try two approaches:
-
-1. A FNN based solely on basic feature engineering.
-2. A empty BERT model based on text understanding.
-
-The performance is evaluated by F1 score of classification on testing dataset through Kaggle: https://www.kaggle.com/competitions/comp90051-22-s2-authorship.
+For modeling, we will try an FNN based solely on basic feature engineering. The performance is evaluated by F1 score of classification on testing dataset through Kaggle: https://www.kaggle.com/competitions/comp90051-22-s2-authorship.
 
 ## File Description
 
@@ -36,13 +31,14 @@ authorship_identification/
 ├── data/
 │   ├── data_original/
 │   ├── data_processed/
+│   ├── data_feature/
 │   └── data_result/
 │
 ├── data_process/
 │
-├── method1/
+├── feature_engineering/
 │
-└── method2/
+└── method/
 ```
 
 The folders are organized as follows:
@@ -50,14 +46,15 @@ The folders are organized as follows:
 - `data/`: This folder contains all the data used in the project.
 
   - `data_original/`: This subfolder contains the original training and testing datasets provided for the project. The data can be downloaded from [Kaggle](https://www.kaggle.com/competitions/comp90051-22-s2-authorship) or [link](https://pan.baidu.com/s/1KVCrEwxMFnnOGytlbCVthw?pwd=cmar) and should be placed in this folder before running the project.
-  - `data_processed/`: This subfolder is where we will save the processed datasets after performing data preprocessing and feature engineering.
-  - `data_result/`: This subfolder is where we will save the final results of predictions.
+  - `data_processed/`: This subfolder is where we will save the processed datasets after performing data preprocessing.
+  - `data_feature/`: This subfolder is where we will save the feature-engineered datasets after performing feature engineering.
+  - `data_result/`: This subfolder is where we will save the results of predictions after performing modeling.
 
 - `data_process/`: This folder contains the code for data preprocessing.
 
-- `method1/`: This folder contains the code for the first modeling approach, which is based on basic feature engineering and a feed-forward neural network (FNN).
+- `feature_engineering/`: This folder contains the code for feature engineering.
 
-- `method2/`: This folder contains the code for the second modeling approach, which is based on text understanding using an empty BERT model.
+- `method/`: This folder contains the code for the modeling approaches.
 
 ## Data Processing
 To prepare our data for downstream feature engineering and modeling, we will perform the following data preprocessing steps:
@@ -66,11 +63,10 @@ To prepare our data for downstream feature engineering and modeling, we will per
 3. Create string formats for the title and abstract `str_title` and `str_abstract`, and merge them into a new column `str_combined`.
 4. Fill any NA values in the venue column with `465`.
 
-## Method 1: Basic Features + FNN
-### 1.1 Basic Feature Engineering
+## Feature Engineering
 First, we will implement some basic feature engineering methods without using machine learning techniques. The main goal is to establish writing history records, resulting in a total of 500 combined basic features.
 
-#### (1) Coauthors
+### (1) Coauthors
 For coauthors, we create a graph showing the co-occurrence among authors, where nodes represent authors and edge weights represent the frequency of co-occurrence between two authors.
 
 For each paper, we create a temporary array of size 100, with each position representing a prolific author. For each coauthor in the paper's coauthors list, we locate them in the graph, find their prolific author neighbors, and add the corresponding edge weight to the appropriate position in the temporary array. We repeat this for all coauthors of the paper.
@@ -79,49 +75,26 @@ Next, we consider deeper collaborative relationships by searching the graph usin
 
 Finally, this temporary array of size 100 will serve as a feature in this section.
 
-#### (2) Venue
+### (2) Venue
 For the venue, we first establish a dictionary that records the frequency history of authors in relation to venues in the training dataset. For each paper, we locate its venue in the dictionary and transform the frequencies of the 100 prolific authors into an array of size 100, which will be used as a feature.
 
 Additionally, we create another feature based on venue, considering the coauthor ties. For each coauthor of a given paper, we look at the author frequency of the venues where that coauthor has published and store this information in another array of size 100.
 
-#### (3) Text
+### (3) Text
 For the text (which combines the title and abstract), we start by training a TFIDF vectorizer to transform each text into TFIDF vectors, identifying the top 20 unique words. We then record the frequencies of these unique words in a dictionary. For each paper's text, we identify its top 20 unique words, find them in the dictionary, and convert the frequencies of 100 prolific authors into an array of size 100 to use as a feature.
 
 Similarly, we create another version of the text-based feature, considering the coauthor ties, and store it as an array of size 100.
 
-### 1.2 FNN Model
+## FNN Model
 
 In this model, we construct a feed-forward neural network (FNN) based on basic features. The network consists of 3 hidden layers with 512, 256, and 128 nodes, respectively. The output activation function is sigmoid, which is suitable for multi-label classification. To prevent overfitting, we apply a dropout rate of 0.1 in the hidden layers and use L2 regularization on the parameters.
-
-## Method 2: Textual Feature + Empty BERT Model
-
-### 2.1 Textual Feature Engineering
-In this method, we focus on textual features and utilize an empty BERT model for text understanding. Since the textual features are represented as sequences of word indices, this kind of feature is suitable for transformer-based models like BERT.
-
-First, we append authors, venue, and year into the vocabulary:
-
-- The texts (title and abstract) are represented as sequences of word indices, where each word is mapped to an index in the range {1,...,4999}.
-- The year is represented as an index in the range {0,...,19}. We add 5000 to the year indices to append them to the vocabulary without conflicts.
-- The venue is represented as an index in the range {0,...,464}. So, we add an additional 5020 to the venue indices to append them to the vocabulary without conflicts.
-- The authors are represented as indices in the range {0,...,21245}. We add 5486 to the author indices to append them to the vocabulary without conflicts.
-
-Then, we create a combined text feature by concatenating all the integer-formatted features into a single sequence by the following order: year, venue, coauthors, title, abstract. This combined feature will be used as input for the BERT model, with max sequence length set to 128.
-
-### 2.2 BERT Model
-
-In this model, we utilize an empty BERT model for text understanding. Since the input features are represented as sequences of word indices, we can directly feed them into the BERT model. The pretrained BERT model is not used because the input features are not in natural language format.
-
-The BERT model is downloaded from Hugging Face and the parameters are initialized randomly. The downstream classification head consists of a single linear layer with sigmoid activation, which is suitable for multi-label classification.
 
 ## Final Results
 
 The final performance of models are evaluated by the F1 scores on test dataset on Kaggle:
 
-| Method   | Dataset    | Precision | Recall | F1 Score |
-|----------|------------|-----------|--------|----------|
-| Method 1 | Training   | 0.9986    | 0.9911 | 0.9948   |
-| Method 1 | Validation | 0.8824    | 0.7057 | 0.7725   |
-| Method 1 | Testing    | 0.5500    | 0.5077 | 0.5279   |
-| Method 2 | Training   | 0.316     | 0.290  | 0.302    |
-| Method 2 | Validation | 0.306     | 0.281  | 0.293    |
-| Method 2 | Testing    | 0.305     | 0.280  | 0.292    |
+| Dataset    | Precision | Recall | F1 Score |
+|------------|-----------|--------|----------|
+| Training   | 0.9986    | 0.9911 | 0.9948   |
+| Validation | 0.8824    | 0.7057 | 0.7725   |
+| Testing    | 0.5500    | 0.5077 | 0.5279   |
